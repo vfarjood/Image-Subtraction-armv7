@@ -65,7 +65,15 @@ int main(int argc, char** argv )
     cv::Mat background = cv::imread("../media/traffic/image-0.jpg", 1);
     cv::Mat image = cv::imread("../media/traffic/image-1.jpg", 1);
     std::cout << "Loading Time: " << time.stop() << "\n";
-    
+
+    // create result file:
+    std::ofstream result_file ("result.txt");
+    if (!result_file.is_open())
+    {
+        std::cout << "Unable to open file";
+    }
+
+
     time.start();
 
     cv::Mat imgDifference;
@@ -128,16 +136,18 @@ int main(int argc, char** argv )
     std::cout << "Total Time: " << total_time.stop() << "\n";
     std::cout << "Number of detected cars: " << centroids.size() << "\n";
 
-    // for(int i=0; i < centroids.size(); i++)
-    // {
-    //     std::cout << "name: "  << centroids[i].name << "\n";
-    //     std::cout << "ID: "    << centroids[i].id << "\n";
-    //     std::cout << "conf: "  << centroids[i].conf << "\n";
-    //     std::cout << "center: "<< centroids[i].center << "\n";
-    //     std::cout << "c_x: "   << centroids[i].box.x << "\n";
-    //     std::cout << "c_y: "   << centroids[i].box.y << "\n";
-    //     std::cout << "w: "     << centroids[i].box.width  << "\n";
-    //     std::cout << "h: "     << centroids[i].box.height << "\n";
-    // }
+    for(int i=0; i < centroids.size(); i++)
+    {
+        result_file << "name: "  << centroids[i].name << "\n";
+        result_file << "ID: "    << centroids[i].id << "\n";
+        result_file << "conf: "  << centroids[i].conf << "\n";
+        result_file << "center: "<< centroids[i].center << "\n";
+        result_file << "x: "     << centroids[i].box.x << "\n";
+        result_file << "y: "     << centroids[i].box.y << "\n";
+        result_file << "w: "     << centroids[i].box.width  << "\n";
+        result_file << "h: "     << centroids[i].box.height << "\n";
+        result_file << "---------------------" << "\n";
+    }
+
     return 0;
 }
